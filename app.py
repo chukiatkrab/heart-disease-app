@@ -12,9 +12,9 @@ with open("heart_model.pkl", "rb") as file:
 st.title("Heart Disease Prediction App (8 Features Model)")
 
 # debug info
-st.write("Model expects:", model.n_features_in_, "features")
-if hasattr(model, "feature_names_in_"):
-    st.write("Feature names:", list(model.feature_names_in_))
+# st.write("Model expects:", model.n_features_in_, "features")
+# if hasattr(model, "feature_names_in_"):
+#     st.write("Feature names:", list(model.feature_names_in_))
 
 
 # ======================
@@ -47,8 +47,8 @@ if st.button("Predict Manual"):
 
     prediction = model.predict(input_data)
 
-    st.write("Prediction result:", prediction)
-    st.write("Prediction value:", prediction[0])
+    # st.write("Prediction result:", prediction)
+    # st.write("Prediction value:", prediction[0])
 
     if prediction[0] == 1:
         st.error("Heart Disease Detected")
