@@ -92,3 +92,6 @@ if uploaded_file is not None:
     st.dataframe(df)
 
     st.write("Prediction array:", prediction)
+
+    st.write("Raw prediction:", prediction)
+    st.write("Prediction probabilities:", model.predict_proba(input_data))
