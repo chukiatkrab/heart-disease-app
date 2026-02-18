@@ -9,7 +9,7 @@ import pandas as pd
 with open("heart_model.pkl", "rb") as file:
     model = pickle.load(file)
 
-st.title("Heart Disease Prediction App (8 Features Model)")
+st.title("Heart Disease Prediction App")
 
 # debug info
 # st.write("Model expects:", model.n_features_in_, "features")
