@@ -31,10 +31,11 @@ thal = st.selectbox("Thal", [0, 1, 2, 3])
 if st.button("Predict Manual"):
 
     input_data = np.array([[
-        age, sex, cp, trestbps, chol,
-        fbs, restecg, thalach,
-        exang, oldpeak, slope, ca, thal
-    ]])
+    age, sex, cp, trestbps, chol,
+    fbs, restecg, thalach,
+    exang, oldpeak, slope, ca, thal
+]])
+
 
     prediction = model.predict(input_data)
 
@@ -47,6 +48,9 @@ if st.button("Predict Manual"):
     else:
         st.write("Meaning: No Heart Disease")
 
+
+st.write("Expected features:", model.n_features_in_)
+st.write("Actual features:", input_data.shape[1])
 
 # ======================
 # CSV Upload
