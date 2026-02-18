@@ -50,7 +50,7 @@ if st.button("Predict Manual"):
 
 
 st.write("Expected features:", model.n_features_in_)
-st.write("Actual features:", input_data.shape[1])
+# st.write("Actual features:", input_data.shape[1])
 
 # ======================
 # CSV Upload
