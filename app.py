@@ -42,14 +42,16 @@ if st.button("Predict Manual"):
     st.write("Prediction result:", prediction)
     st.write("Prediction value:", prediction[0])
     
-    st.write("Expected features:", model.n_features_in_)
-    # st.write("Actual features:", input_data.shape[1])
 
     # optional meaning
     if prediction[0] == 1:
         st.write("Meaning: Heart Disease")
     else:
         st.write("Meaning: No Heart Disease")
+
+
+st.write("Model expects number of features:", model.n_features_in_)
+st.write("Feature names:", model.feature_names_in_)
 
 
 # ======================
