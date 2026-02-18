@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 # load model
-MODEL_PATH = os.path.join(os.path.dirname(__file__), "heart_model.pkl")
+model = os.path.join(os.path.dirname(__file__), "heart_model.pkl")
 
 st.title("Heart Disease Prediction App")
 
