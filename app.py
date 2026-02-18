@@ -50,7 +50,7 @@ if st.button("Predict Manual"):
     # st.write("Prediction result:", prediction)
     # st.write("Prediction value:", prediction[0])
 
-    if prediction[0] == 1:
+    if prediction[0] == 0 :
         st.error("Heart Disease Detected")
     else:
         st.success("No Heart Disease")
