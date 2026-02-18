@@ -51,34 +51,34 @@ if st.button("Predict"):
     else:
         st.success("No Heart Disease")
 
-# =========================
-# PART 2: CSV Upload
-# =========================
-st.header("Predict from CSV File")
+# # =========================
+# # PART 2: CSV Upload
+# # =========================
+# st.header("Predict from CSV File")
 
-uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
+# uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
 
-if uploaded_file is not None:
+# if uploaded_file is not None:
 
-    df = pd.read_csv(uploaded_file)
+#     df = pd.read_csv(uploaded_file)
 
-    st.write("CSV Preview:")
-    st.dataframe(df)
+#     st.write("CSV Preview:")
+#     st.dataframe(df)
 
-    input_data = df[['age','sex','cp','trestbps','chol','fbs','restecg','thalach']].values
+#     input_data = df[['age','sex','cp','trestbps','chol','fbs','restecg','thalach']].values
 
-    prediction = model.predict(input_data)
+#     prediction = model.predict(input_data)
 
-    df['Prediction'] = prediction
+#     df['Prediction'] = prediction
 
-    st.write("Prediction Result:")
-    st.dataframe(df)
+#     st.write("Prediction Result:")
+#     st.dataframe(df)
 
-    csv = df.to_csv(index=False).encode('utf-8')
+#     csv = df.to_csv(index=False).encode('utf-8')
 
-    st.download_button(
-        label="Download Result CSV",
-        data=csv,
-        file_name="heart_prediction_result.csv",
-        mime="text/csv"
-    )
+#     st.download_button(
+#         label="Download Result CSV",
+#         data=csv,
+#         file_name="heart_prediction_result.csv",
+#         mime="text/csv"
+#     )
