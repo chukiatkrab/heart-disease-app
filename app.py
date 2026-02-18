@@ -30,10 +30,19 @@ chol = st.number_input("Cholesterol", 100, 600)
 fbs = st.selectbox("Fasting Blood Sugar", [0, 1])
 restecg = st.selectbox("Rest ECG", [0, 2])
 thalach = st.number_input("Max Heart Rate", 60, 220)
+exang = st.selectbox("Exercise Induced Angina", [0, 1])
+oldpeak = st.number_input("Oldpeak", 0.0, 6.0)
+slope = st.selectbox("Slope", [0, 1, 2])
+ca = st.selectbox("CA", [0, 1, 2, 3])
+thal = st.selectbox("Thal", [0, 1, 2, 3])
 
-if st.button("Predict Manual Input"):
+if st.button("Predict"):
 
-    input_data = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach]])
+    input_data = np.array([[
+        age, sex, cp, trestbps, chol,
+        fbs, restecg, thalach,
+        exang, oldpeak, slope, ca, thal
+    ]])
 
     prediction = model.predict(input_data)
 
