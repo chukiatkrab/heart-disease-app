@@ -55,7 +55,7 @@ if st.button("Predict Manual"):
     else:
         st.error("Heart Disease Detected")
 
-
+    st.write("Prediction value:", prediction[0])
 # ======================
 # CSV Upload (8 features only)
 # ======================
