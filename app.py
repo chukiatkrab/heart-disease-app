@@ -4,8 +4,17 @@ import numpy as np
 import pandas as pd
 import os
 
-# load model
-model = os.path.join(os.path.dirname(__file__), "heart_model.pkl")
+# =========================
+# LOAD MODEL (FIXED)
+# =========================
+model_path = os.path.join(os.path.dirname(__file__), "heart_model.pkl")
+
+with open(model_path, "rb") as file:
+    model = pickle.load(file)
+
+# =========================
+# TITLE
+# =========================
 st.title("Heart Disease Prediction App")
 
 # =========================
@@ -33,7 +42,6 @@ if st.button("Predict Manual Input"):
     else:
         st.success("No Heart Disease")
 
-
 # =========================
 # PART 2: CSV Upload
 # =========================
@@ -48,20 +56,15 @@ if uploaded_file is not None:
     st.write("CSV Preview:")
     st.dataframe(df)
 
-    # select columns
     input_data = df[['age','sex','cp','trestbps','chol','fbs','restecg','thalach']].values
 
-    # predict
     prediction = model.predict(input_data)
 
-    # add result column
     df['Prediction'] = prediction
 
-    # show result
     st.write("Prediction Result:")
     st.dataframe(df)
 
-    # download result
     csv = df.to_csv(index=False).encode('utf-8')
 
     st.download_button(
