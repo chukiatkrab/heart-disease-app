@@ -1,11 +1,6 @@
 import streamlit as st
 import pickle
-import numpy as np
 import pandas as pd
-import sklearn
-import streamlit as st
-
-st.write("sklearn version:", sklearn.__version__)
 
 # ======================
 # Load model
@@ -15,19 +10,17 @@ with open("heart_model.pkl", "rb") as file:
 
 st.title("Heart Disease Prediction App")
 
-# debug info
-# st.write("Model expects:", model.n_features_in_, "features")
-# if hasattr(model, "feature_names_in_"):
-#     st.write("Feature names:", list(model.feature_names_in_))
-
+# แสดง info model (debug)
+st.write("Model loaded successfully")
+st.write("Model expects features:", list(model.feature_names_in_))
 
 # ======================
-# Manual Input (8 features only)
+# Manual Input Section
 # ======================
 st.header("Manual Input")
 
 age = st.number_input("Age", 20, 100, value=50)
-sex = st.selectbox("Sex (0=female, 1=male)", [0, 1])
+sex = st.selectbox("Sex (0 = female, 1 = male)", [0, 1])
 cp = st.selectbox("Chest Pain Type (0–3)", [0, 1, 2, 3])
 trestbps = st.number_input("Resting Blood Pressure", 80, 200, value=120)
 chol = st.number_input("Cholesterol", 100, 600, value=200)
@@ -35,33 +28,34 @@ fbs = st.selectbox("Fasting Blood Sugar >120 (0=no, 1=yes)", [0, 1])
 restecg = st.selectbox("Rest ECG (0–2)", [0, 1, 2])
 thalach = st.number_input("Max Heart Rate", 60, 220, value=150)
 
-
 if st.button("Predict Manual"):
 
-    input_data = np.array([[
-        age,
-        sex,
-        cp,
-        trestbps,
-        chol,
-        fbs,
-        restecg,
-        thalach
-    ]])
+    # ใช้ DataFrame (สำคัญมาก)
+    input_df = pd.DataFrame([{
+        'age': age,
+        'sex': sex,
+        'cp': cp,
+        'trestbps': trestbps,
+        'chol': chol,
+        'fbs': fbs,
+        'restecg': restecg,
+        'thalach': thalach
+    }])
 
-    prediction = model.predict(input_data)
+    prediction = model.predict(input_df)
+    probability = model.predict_proba(input_df)
 
-    # st.write("Prediction result:", prediction)
-    # st.write("Prediction value:", prediction[0])
+    st.write("Raw prediction:", prediction[0])
+    st.write("Probability:", probability)
 
-    if prediction[0] == 1 :
-        st.error("Heart Disease Detected")
+    if prediction[0] == 1:
+        st.success("Heart Disease Detected")
     else:
         st.success("No Heart Disease")
 
-    st.write("Prediction value:", prediction[0])
+
 # ======================
-# CSV Upload (8 features only)
+# CSV Upload Section
 # ======================
 st.header("CSV Prediction")
 
@@ -74,7 +68,6 @@ if uploaded_file is not None:
     st.write("Input Data:")
     st.dataframe(df)
 
-    # select only required 8 features
     required_columns = [
         'age',
         'sex',
@@ -86,16 +79,22 @@ if uploaded_file is not None:
         'thalach'
     ]
 
-    input_data = df[required_columns].values
+    # ตรวจสอบ columns
+    if all(col in df.columns for col in required_columns):
 
-    prediction = model.predict(input_data)
+        input_df = df[required_columns]
 
-    df["Prediction"] = prediction
+        prediction = model.predict(input_df)
+        probability = model.predict_proba(input_df)
 
-    st.write("Prediction Result:")
-    st.dataframe(df)
+        df["Prediction"] = prediction
 
-    st.write("Prediction array:", prediction)
+        st.write("Prediction Result:")
+        st.dataframe(df)
 
-    st.write("Raw prediction:", prediction)
-    st.write("Prediction probabilities:", model.predict_proba(input_data))
+        st.write("Prediction array:", prediction)
+        st.write("Prediction probabilities:", probability)
+
+    else:
+        st.error("CSV file must contain required columns:")
+        st.write(required_columns)
