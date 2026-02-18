@@ -43,7 +43,7 @@ if st.button("Predict Manual"):
     st.write("Prediction value:", prediction[0])
     
     st.write("Expected features:", model.n_features_in_)
-    st.write("Actual features:", input_data.shape[1])
+    # st.write("Actual features:", input_data.shape[1])
 
     # optional meaning
     if prediction[0] == 1:
