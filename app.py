@@ -4,7 +4,7 @@ import numpy as np
 import os
 
 # load model
-model = os.path.join(os.path.dirname(__file__), "heart_model.pkl")
+model = pickle.load(open("heart_model.pkl", "rb"))
 
 st.title("Heart Disease Prediction App")
 
