@@ -14,33 +14,37 @@ st.title("Heart Disease Prediction App")
 st.write("Model loaded successfully")
 st.write("Model expects features:", list(model.feature_names_in_))
 
+st.write("Model features:", list(model.feature_names_in_))
+
 # ======================
 # Manual Input Section
 # ======================
 st.header("Manual Input")
 
 age = st.number_input("Age", 20, 100, value=50)
-sex = st.selectbox("Sex (0 = female, 1 = male)", [0, 1])
-cp = st.selectbox("Chest Pain Type (0–3)", [0, 1, 2, 3])
-trestbps = st.number_input("Resting Blood Pressure", 80, 200, value=120)
+sex = st.selectbox("Sex", [0,1])
+cp = st.selectbox("Chest Pain", [0,1,2,3])
 chol = st.number_input("Cholesterol", 100, 600, value=200)
-fbs = st.selectbox("Fasting Blood Sugar >120 (0=no, 1=yes)", [0, 1])
-restecg = st.selectbox("Rest ECG (0–2)", [0, 1, 2])
-thalach = st.number_input("Max Heart Rate", 60, 220, value=150)
+ca = st.selectbox("Number of major vessels (ca)", [0,1,2,3])
+oldpeak = st.number_input("Oldpeak", 0.0, 6.0, value=1.0)
+slope = st.selectbox("Slope", [0,1,2])
+thal = st.selectbox("Thal", [0,1,2,3])
+
 
 if st.button("Predict Manual"):
 
     # ใช้ DataFrame (สำคัญมาก)
     input_df = pd.DataFrame([{
-        'age': age,
-        'sex': sex,
-        'cp': cp,
-        'trestbps': trestbps,
-        'chol': chol,
-        'fbs': fbs,
-        'restecg': restecg,
-        'thalach': thalach
-    }])
+    'age': age,
+    'sex': sex,
+    'cp': cp,
+    'chol': chol,
+    'ca': ca,
+    'oldpeak': oldpeak,
+    'slope': slope,
+    'thal': thal
+}])
+
 
     prediction = model.predict(input_df)
     probability = model.predict_proba(input_df)
@@ -69,15 +73,16 @@ if uploaded_file is not None:
     st.dataframe(df)
 
     required_columns = [
-        'age',
-        'sex',
-        'cp',
-        'trestbps',
-        'chol',
-        'fbs',
-        'restecg',
-        'thalach'
-    ]
+    'age',
+    'sex',
+    'cp',
+    'chol',
+    'ca',
+    'oldpeak',
+    'slope',
+    'thal'
+]
+
 
     # ตรวจสอบ columns
     if all(col in df.columns for col in required_columns):
