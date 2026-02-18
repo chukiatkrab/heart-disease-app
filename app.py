@@ -1,14 +1,17 @@
 import streamlit as st
 import pickle
 import numpy as np
-import os
+import pandas as pd
 
 # load model
 model = pickle.load(open("heart_model.pkl", "rb"))
 
 st.title("Heart Disease Prediction App")
 
-st.write("Enter patient information:")
+# =========================
+# PART 1: Manual input
+# =========================
+st.header("Manual Input")
 
 age = st.number_input("Age", 20, 100)
 sex = st.selectbox("Sex", [0, 1])
@@ -19,7 +22,7 @@ fbs = st.selectbox("Fasting Blood Sugar", [0, 1])
 restecg = st.selectbox("Rest ECG", [0, 2])
 thalach = st.number_input("Max Heart Rate", 60, 220)
 
-if st.button("Predict"):
+if st.button("Predict Manual Input"):
 
     input_data = np.array([[age, sex, cp, trestbps, chol, fbs, restecg, thalach]])
 
@@ -29,3 +32,41 @@ if st.button("Predict"):
         st.error("Heart Disease Detected")
     else:
         st.success("No Heart Disease")
+
+
+# =========================
+# PART 2: CSV Upload
+# =========================
+st.header("Predict from CSV File")
+
+uploaded_file = st.file_uploader("Upload CSV", type=["csv"])
+
+if uploaded_file is not None:
+
+    df = pd.read_csv(uploaded_file)
+
+    st.write("CSV Preview:")
+    st.dataframe(df)
+
+    # select columns
+    input_data = df[['age','sex','cp','trestbps','chol','fbs','restecg','thalach']].values
+
+    # predict
+    prediction = model.predict(input_data)
+
+    # add result column
+    df['Prediction'] = prediction
+
+    # show result
+    st.write("Prediction Result:")
+    st.dataframe(df)
+
+    # download result
+    csv = df.to_csv(index=False).encode('utf-8')
+
+    st.download_button(
+        label="Download Result CSV",
+        data=csv,
+        file_name="heart_prediction_result.csv",
+        mime="text/csv"
+    )
