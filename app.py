@@ -10,56 +10,50 @@ with open("heart_model.pkl", "rb") as file:
 
 st.title("Heart Disease Prediction App")
 
-# แสดง info model (debug)
-st.write("Model loaded successfully")
-st.write("Model expects features:", list(model.feature_names_in_))
-
-st.write("Model features:", list(model.feature_names_in_))
+# show model features (debug)
+st.write("Model expects features:")
+st.write(list(model.feature_names_in_))
 
 # ======================
-# Manual Input Section
+# Manual Input (CORRECT FEATURES)
 # ======================
 st.header("Manual Input")
 
-age = st.number_input("Age", 20, 100, value=50)
-sex = st.selectbox("Sex", [0,1])
-cp = st.selectbox("Chest Pain", [0,1,2,3])
-chol = st.number_input("Cholesterol", 100, 600, value=200)
-ca = st.selectbox("Number of major vessels (ca)", [0,1,2,3])
-oldpeak = st.number_input("Oldpeak", 0.0, 6.0, value=1.0)
-slope = st.selectbox("Slope", [0,1,2])
-thal = st.selectbox("Thal", [0,1,2,3])
+chol = st.number_input("Cholesterol", 100, 600, 200)
+age = st.number_input("Age", 20, 100, 50)
+slope = st.selectbox("Slope (0–2)", [0,1,2])
+cp = st.selectbox("Chest Pain Type (0–3)", [0,1,2,3])
+thal = st.selectbox("Thal (0–3)", [0,1,2,3])
+ca = st.selectbox("CA (0–4)", [0,1,2,3,4])
+sex = st.selectbox("Sex (0=female, 1=male)", [0,1])
+oldpeak = st.number_input("Oldpeak", 0.0, 10.0, 1.0)
 
+if st.button("Predict"):
 
-if st.button("Predict Manual"):
-
-    # ใช้ DataFrame (สำคัญมาก)
     input_df = pd.DataFrame([{
-    'age': age,
-    'sex': sex,
-    'cp': cp,
-    'chol': chol,
-    'ca': ca,
-    'oldpeak': oldpeak,
-    'slope': slope,
-    'thal': thal
-}])
-
+        "chol": chol,
+        "age": age,
+        "slope": slope,
+        "cp": cp,
+        "thal": thal,
+        "ca": ca,
+        "sex": sex,
+        "oldpeak": oldpeak
+    }])
 
     prediction = model.predict(input_df)
     probability = model.predict_proba(input_df)
 
-    st.write("Raw prediction:", prediction[0])
+    st.write("Prediction:", prediction[0])
     st.write("Probability:", probability)
 
     if prediction[0] == 1:
-        st.success("Heart Disease Detected")
+        st.error("Heart Disease Detected")
     else:
         st.success("No Heart Disease")
 
-
 # ======================
-# CSV Upload Section
+# CSV Upload
 # ======================
 st.header("CSV Prediction")
 
@@ -69,37 +63,29 @@ if uploaded_file is not None:
 
     df = pd.read_csv(uploaded_file)
 
-    st.write("Input Data:")
+    st.write("Uploaded Data:")
     st.dataframe(df)
 
     required_columns = [
-    'age',
-    'sex',
-    'cp',
-    'chol',
-    'ca',
-    'oldpeak',
-    'slope',
-    'thal'
-]
+        "chol",
+        "age",
+        "slope",
+        "cp",
+        "thal",
+        "ca",
+        "sex",
+        "oldpeak"
+    ]
 
+    input_df = df[required_columns]
 
-    # ตรวจสอบ columns
-    if all(col in df.columns for col in required_columns):
+    prediction = model.predict(input_df)
+    probability = model.predict_proba(input_df)
 
-        input_df = df[required_columns]
+    df["Prediction"] = prediction
 
-        prediction = model.predict(input_df)
-        probability = model.predict_proba(input_df)
+    st.write("Prediction Result:")
+    st.dataframe(df)
 
-        df["Prediction"] = prediction
-
-        st.write("Prediction Result:")
-        st.dataframe(df)
-
-        st.write("Prediction array:", prediction)
-        st.write("Prediction probabilities:", probability)
-
-    else:
-        st.error("CSV file must contain required columns:")
-        st.write(required_columns)
+    st.write("Prediction array:", prediction)
+    st.write("Prediction probability:", probability)
